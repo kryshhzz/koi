@@ -1,6 +1,6 @@
 
 
-#koi : simple, small, quick web based editor in golang
+# koi : simple, small, quick web based editor in golang
 
 ## How to Download
 Three steps to download koi
