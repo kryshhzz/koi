@@ -12,7 +12,7 @@ Three steps to download koi
 
 ### 2. Download `.KOI` folder
 ```
-git clone github.com/kryshhzz/.KOI/
+git clone https://github.com/kryshhzz/.KOI/
 ```
 
 ### 3. move the `.KOI` folder to your home directory
