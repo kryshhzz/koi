@@ -1,0 +1,53 @@
+<style> 
+    header {
+        width : 100%; 
+
+        display :flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .logo {
+        color : var(--white);
+    }
+    .logo span {
+        color : var(--base);
+    }
+    .save-file-btn {
+        background : var(--base);
+        color : var(--black-3);
+        padding : .5em 1em;
+        font-size : .7em;
+        text-transform: uppercase;
+        font-weight : bold;
+        border : none;
+        outline: none;
+        border-radius : .2em; 
+        cursor : pointer;
+    }
+    .save-file-btn:disabled {
+        background : gray;
+        cursor :default ;
+    }
+    .close-btn {
+        background : red;
+        color : white;
+        padding : .5em 1em;
+        font-size : .7em;
+        text-transform: uppercase;
+        font-weight : bold;
+        border : none;
+        outline: none;
+        border-radius : .2em;
+        cursor : pointer;
+    }
+
+</style>
+<header>
+    <div class="logo">
+        <b>k<span>o</span>i</b> 
+    </div> 
+    <div class="action-bar"> 
+        <button onclick="save()" class='save-file-btn' disabled=true>save file</button>
+        <button onclick="closeKOI()" class="close-btn" >close koi</button>
+    </div>
+</header>

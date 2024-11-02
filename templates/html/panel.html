@@ -1,0 +1,129 @@
+{% macro recursive_display(Dirs) %}
+    {% for d in Dirs %} 
+        {{ d.Name }}  
+        <div class="panel-cont">
+            {% for f in d.Files %}            
+                <div class="panel-line" path='{{ f.Path }}' size="{{f.Size}}" onclick='openFile(this)'><div class="ball">•</div><div class='panel-name'>{{ f.Name }}</div></div> 
+            {% endfor %}      
+            {{ recursive_display(d.Dirs) }}
+        </div>
+    {% endfor %}
+ {% endmacro %}
+
+
+<style>
+    .toggler {
+        position : absolute; 
+        top : 50%;
+        right : -1em;
+        width : 1em;
+        height : 3em;
+        background : var(--gray-1);
+        color : var(--black-3); 
+        cursor : pointer;  
+        border-radius : 0 .5em .5em 0;
+
+        display : flex;
+        justify-content : center;
+        align-items : center;
+    }  
+    .panel-bowl { 
+        max-width : 300px;
+        height : calc(100vh - 3.5em);
+        padding : 1em 3em 1em 1em; 
+        overflow-y : auto;  
+        color : var(--black-5);
+    } 
+    .panel-cont { 
+        padding :  0 0 0 2em ;  
+        font-weight : 500;  
+        font-size : .75rem;   
+        text-transform : uppercase;
+        letter-spacing : .015em; 
+        border-left : .04em solid var(--gray-2);  
+
+        display : flex;
+        flex-direction : column;
+        justify-content : start; 
+        align-items : start;  
+        gap : .75em;
+    } 
+    .panel-line {  
+        font-size : .95em; 
+        position : relative; 
+        cursor : pointer;
+        padding-left : 1em;
+    } 
+    .panel-line .ball {
+        color : red;  
+        font-size : 2em;
+
+        position : absolute;
+        top : 50%;
+        left : -.1rem;
+        transform : translateY(-50%);
+    }
+    .panel-line:hover { 
+        color : var(--black) !important; 
+    } 
+
+</style> 
+<div class="toggler"><</div>
+<div class="panel-bowl">
+    {{cDir}} 
+    <br><br>
+    <div class="panel-cont"> 
+        {% for d in Dirs.Files %} 
+            <div class="panel-line" path='{{ d.Path }}' size="{{d.Size}}" onclick='openFile(this)'><div class="ball">•</div><div class='panel-name'>{{ d.Name }}</div></div>
+        {% endfor %} 
+        {{ recursive_display(Dirs.Dirs) }}
+    </div> 
+     
+</div>
+<script>  
+    var panelOpen = true 
+
+    document.querySelector(".toggler").addEventListener("click",function(e) {
+        document.querySelector('.panel-bowl').classList.toggle("hide") 
+        panelOpen = !panelOpen 
+        if (panelOpen) {
+            e.target.innerHTML = "<"
+        }else {
+            e.target.innerHTML = ">"
+        }
+    }) 
+
+
+    var panelLines = document.querySelectorAll(".panel-line") 
+    panelLines.forEach((pl)=>{ 
+        var name = pl.querySelector('.panel-name').innerHTML  
+        var clr = "var(--black-8)" 
+
+        if ( name.endsWith('.js') || name.endsWith(".json") ){
+            clr = "gold"
+        }else if ( name.endsWith('.go') || name.toLowerCase() == "go.mod" || name.toLowerCase() == "go.sum" ) {
+            clr = "deepskyblue"
+        }else if ( name.endsWith('.cpp')){
+            clr = "brown"
+        }else if ( name.endsWith('.css')){
+            clr = "magenta"
+        }else if ( name.endsWith('.html')){
+            clr = "coral"
+        }else if ( name.endsWith('.cpp')){
+            clr = "deeppink"
+        }else if ( name.endsWith('.py')){
+            clr = "steelblue"
+        }else if ( name.endsWith('.sh')){
+            clr = "yellowgreen"
+        }else if ( name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png') || name.endsWith('.webp') || name.endsWith('.svg')  ) {
+            clr = "DarkKhaki"
+        }
+
+        pl.querySelector('.ball').style.color = clr; 
+    }) 
+
+
+</script>
+
+
+
