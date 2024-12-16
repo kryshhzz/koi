@@ -1,0 +1,250 @@
+<style>
+    .editor-bowl {
+        height : calc(100vh);
+        width : 100%;
+        background : var(--black-3);
+
+        /* display : flex;
+        flex-direction : column;
+        justify-content : flex-start;
+        align-items : start; */
+
+        display :flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start; 
+    }
+    .editor-header {
+        width : 100%;
+        padding  : .75em ;
+        border-bottom:  .15em solid var(--black-4);
+
+        display :flex;
+        justify-content: space-between;
+        align-items: center;
+        gap : 1em;
+    }
+    .file-name-bar { 
+        overflow : auto;
+        width : calc(100% - 6em);
+
+        display : flex;
+        justify-content : flex-start;
+        align-items : start;
+        gap : .5em;
+    }
+    .file-name-bar::-webkit-scrollbar {
+        display: none; 
+    }
+    .file-name-cont { 
+        background : var(--black-4);
+        color : var(--gray-2);
+        border-radius: 5em;
+        font-size : .8em;
+        cursor : pointer;
+        padding : 0 .5em 0 0;
+
+        display : flex;
+        justify-content : center;
+        align-items : center;
+    }
+    .file-name-cont > div {
+        padding: .2em .5em .2em .5em;
+        border-radius: 5em;
+
+        display : flex;
+        justify-content : center;
+        align-items : center;
+        gap : .5em;
+    }
+    .file-name-cont i {
+        color : var(--red);
+        font-size : 0;
+        transition :.25s;
+    }
+    .file-name-cont:hover > i {
+        font-size : 1em;
+    }
+    .saved {
+        animation : blink .75s 1 ease;
+    }
+    @keyframes blink {
+        from {
+            background : var(--green);
+        }
+        to {
+            background : var(--black-4);
+        }
+    }
+    .file-name-cont .ball {
+        font-size : 1.5rem;  
+        line-height : 0;
+    }
+    .file-name-cont-value {
+        max-width : 7em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .file-active {
+        border : .1em solid gray;
+    }
+    .actions-bar {
+        width : 6em;
+
+        display : flex;
+        justify-content : space-around;
+        align-items : center;
+    }
+    .actions-bar button {
+        width : 1.25em;
+        height : 1.25em;
+        border-radius: 500em;
+        border : none;
+        outline : none;
+        cursor: pointer;
+
+        position: relative;
+    }
+    .actions-bar .aria:hover::after{
+        content : attr(aria-label);
+        background : var(--gray-2);
+        color : black;
+        padding : .2em .4em;
+        border-radius : .2em;
+        font-size : .9em; 
+        white-space: nowrap;
+        z-index : 4;
+
+        position: absolute;
+        top : 1.25rem;
+        right : -25%;
+    }
+    .toggler {
+        background : orange;
+    }
+    .save-file-btn {
+        background : var(--green);
+    }
+    .close-btn {
+        background : var(--red);
+    } 
+    .koi-bubble {
+        width : auto !important; 
+        height : auto !important;
+        padding : .3em 1.25em .1em 1.25em; 
+        background : linear-gradient(to top right,var(--base-blue),#0066ff); 
+        z-index : 21;
+    }
+
+    .editor-cont {
+        width : 100%;
+        padding : 1em .5em 1em .5em;
+
+        display : flex;
+        justify-content: flex-start;
+        align-items: start;
+    }
+
+    .pre-holder {
+        width : 100%;
+
+        display : grid;
+        grid-template-columns: 1fr;
+        grid-template-rows : 1fr;
+        place-items : start;
+    }
+    .pre,.cpre { 
+
+        width : 100%; 
+        height : calc(100vh - 5.5em);
+        overflow : auto;
+        border-radius :.5em;
+        background  :var(--black-3); 
+        white-space: pre;
+        padding : 0 1.5em 0 5em; 
+        color : var(--gray-3);
+        outline : none; 
+        border :none;
+        font-weight : 300;
+        font-size : .85rem; 
+        line-height : 24px;   
+
+        font-family : "Fira Code",monospace;
+
+
+        /* display : flex; 
+        flex-direction : column;
+        justify-content : flex-start;
+        align-items : start; */
+    }  
+    .pre {
+        z-index : 3;
+        caret-color: rgb(255 255 255 / 75%);
+    }
+    .pre  {
+        grid-row : 1/2;
+        grid-column : 1/2;
+        color : rgb(255 255 255 / 10%);
+        background : transparent;
+    }
+    .cpre {
+        grid-row : 1/2;
+        grid-column : 1/2;
+        z-index : 2; 
+
+        counter-reset: line;
+    }
+    .cpre .cline {
+        counter-increment: line; 
+        position : relative;
+    }
+
+    .cpre .cline::before {
+        content: counter(line);
+        position : absolute;
+        left : -3.5rem;
+        top : 0;
+        width : 1.5em;
+        height : 100%;
+        color : var(--black-8);
+        z-index : 5;
+        
+        display : flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .pre::selection {
+      background-color: rgb(255 255 255 / .8);
+      color : black;
+    }
+
+</style>
+
+<div class='editor-bowl'> 
+    <div class="editor-header">
+        <div class='file-name-bar'>
+        </div>  
+        <div class="actions-bar">
+            <button onclick="save()" class='save-file-btn aria' aria-label="Save File"></button>
+            <button onclick="toggleFullScreen()" class='toggler aria' aria-label="Open Full Screen"></button>
+            <!-- <button onclick="closeKOI()" class="close-btn" aria-label="Close KOI"></button>  -->
+            <button class="koi-bubble" onclick="toggleIro()"><i class="bi-asterisk"></i></button>
+        </div>
+    </div>
+
+    <div class="editor-cont">
+        <div class="pre-holder"> 
+            <pre class="cpre"></pre>
+            <pre class="pre" id="pre" contenteditable="plaintext-only"  autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="write your code ..." ></pre>           
+        </div>
+    </div>
+</div>
+
+<script src='/static/base.js'></script>
+<script src='/static/filebuffer.js'></script>
+<script src='/static/editor.js'></script>
+<script src='/static/syntaxHighlighter.js'></script>
+
+

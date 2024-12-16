@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ Title }}</title>   
+    
+    <!-- <link rel="stylesheet" href="/static/index.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style> 
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+        * {
+            margin : 0;
+            padding : 0;
+            box-sizing : border-box ;
+        } 
+
+        :root {
+            --black-2 : #121212;
+            --black-3 : #202020;   
+            --black-4 : #303030;
+            --black-5 : #454545;
+            --black-6 : #606060; 
+            --black-7 : #757575;
+            --black-8 : #909090;
+            --black-9 : #aaa;
+
+            --white : #fff;  
+            
+            --gray-1 : #efefef;
+            --gray-2 : #dedede; 
+            --gray-3 : #cdcdcd;
+            
+            --base : orangered;
+            --base-blue : #00aaff;
+
+            --green : yellowgreen;
+
+            --red : #ff4500;
+        } 
+        body {
+            font-size : 16px; 
+            background : var(--black-5);
+            font-family : "Fira Code", sans-serif; 
+            background  : var(--black-4);
+        } 
+        
+        .hide {
+            display : none !important;
+        }
+
+        .main-cont {
+            width : 100%;
+            height : calc(100vh);
+
+            display : flex;
+            flex-direction : column;
+            justify-content: start;
+            align-items: start;
+        }  
+
+        .inner-cont { 
+            width : 100%; 
+
+            display : flex;
+            justify-content: start;
+            align-items: start;
+        } 
+        .panel {  
+            height : calc(100vh);
+            background : var(--black-4);
+            margin-right : .15em;
+        } 
+
+        .editor {  
+            width : 100%; 
+            overflow : hidden;
+
+            outline : none; 
+            font-family : "Fira Code",monospace;
+        }
+
+        .lang {
+            color : var(--black-8);
+        }
+        .lang-go {
+            color : deepskyblue;
+        }
+        .lang-cpp {
+            color : brown;
+        }
+        .lang-js , .lang-json {
+            color : gold;
+        }
+        .lang-html {
+            color : coral;
+        }
+        .lang-css, .lang-scss {
+            color :violet;
+        }
+        .lang-cpp {
+            color : hotpink;
+        }
+        .lang-py {
+            color : mediumslateblue;
+        }
+        .lang-sh {
+            color : yellowgreen;
+        }
+        .lang-jpg, .lang-jpeg, .lang-webp, .lang-svg {
+            color : rosybrown;
+        }
+        
+        .themeKeyword {
+            color : var(--base);  
+        }
+        .themeKeywordTwo {
+            color : var(--base-blue);
+        }
+        .themeFunc {
+            color : var(--green);
+        }
+        .themeAccent {
+            color : var(--black-8);
+        }
+        .themeComment, .themeComment .themeKeyword, .themeComment .themeKeywordTwo, .themeComment .themeString, .themeComment .themeAccent, .themeComment .themeFunc {
+            color : var(--black-4) ;
+        }
+        .themeString , .themeString .themeKeyword, .themeString .themeKeywordTwo, .themeString .themeComment, .themeString .themeAccent, .themeString .themeFunc{
+            color : var(--black-7) ;
+        }
+
+    /* Custom scrollbar styles using ::-webkit-scrollbar */
+    ::-webkit-scrollbar {
+      padding : 1em;
+      margin  : 1em;
+      width: .5rem;  /* Width of the scrollbar */
+      height : .5rem;
+    }
+
+    /* Custom scrollbar track */
+    ::-webkit-scrollbar-track {
+        width : .5rem;
+      /* background: var(--black-5);  */
+    }
+
+    /* Custom scrollbar thumb (the draggable part) */
+    ::-webkit-scrollbar-thumb { 
+      background: var(--black-7);
+      border-radius: 1em;
+      transition: background-color 0.3s ease;
+      cursor : pointer;
+    }
+
+    /* Hover effect for scrollbar thumb */
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--black-8);  /* Darker thumb color when hovered */
+    }
+
+    ::-webkit-scrollbar-corner  {
+       /* background: var(--black-5); */
+    } 
+
+    .alert-bowl {
+        width : 100%;
+        height : 100vh;
+        z-index : 110; 
+
+        position: fixed;
+        top : 0;
+        left  :0;
+        right : 0;
+
+        display : flex;
+        justify-content: center;
+        align-items : center; 
+
+        background : transparent;
+        backdrop-filter: blur(.5em);
+    }
+    .alert-cont { 
+        min-width: 300px;
+        max-width : 500px;
+        background : var(--black-5);
+        border-radius : .5em; 
+
+        padding : 1em;
+
+        display : flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items : end;
+        gap : 1em;
+    }
+    .alert-cont > div {
+        width : 100%;
+        display : flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items : end;
+        gap : 1em;
+    }
+    .alert-p {
+        width : 100%;
+        color : var(--gray-2);
+    }
+    .alert-cont input {  
+        width : 100%;
+        background : var(--black-4);
+        border : none;
+        outline : none;
+        border-radius: .35em;
+        font-size: .9em;
+        font-family: inherit;
+        padding : .5em .75em; 
+        color : var(--gray-2);
+    }
+    .alert-cont button {
+        padding: .35em .75em ;
+        border : none;
+        outline : none; 
+        border-radius: .4em;
+        cursor: pointer;
+
+        text-transform: uppercase;
+        font-family: inherit;
+        font-weight: 500; 
+        font-size: .8em;
+        letter-spacing: .05em;
+    }
+    .alert-cont .primary-btn{
+        background : var(--base);
+    }
+    .alert-cont .secondary-btn{
+
+    }
+
+    z {
+        color : red;
+    }
+
+    .notifs-bowl {
+        position : fixed;
+        bottom : 0;
+        right : 0;
+        max-width : 400px;
+        z-index : 10;
+        padding : 1.5em 1em;
+
+        display : flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: end;
+        gap : 1em;
+    }
+    .notif-cont {
+        min-width : 350px;
+        max-width: 100%;
+        padding : 1em;
+        background : transparent;
+        border : .1em solid var(--black-4);
+        backdrop-filter: blur(1.5em);
+        color : white;
+        font-size: .8em;
+        border-radius: 1em;
+
+        display : flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap : 1em;
+
+        position: relative;
+    }
+    .notif-cont button {
+        border : none;
+        outline : none;
+        border-radius: 50%; 
+        background : transparent;
+        color : var(--red);
+        width : 1.5em;
+        height : 1.5em;
+        cursor : pointer;
+
+        display : flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .notif-ERROR {
+
+    }
+    .notif-ERROR::before {
+        content : "";
+        position : absolute;
+        top : 0;
+        left : 0;
+        right : 0;
+        bottom : 0;
+        background : linear-gradient(to right,transparent , rgba(255 0 0 / .5));
+        z-index: -1;
+        border-radius : inherit;
+    }
+    .notif-INFO {
+        
+    }
+    .notif-INFO::before {
+        content : "";
+        position : absolute;
+        top : 0;
+        left : 0;
+        right : 0;
+        bottom : 0;
+        background : linear-gradient(to right,transparent , rgba(53, 160, 218, 0.65));
+        border-radius : inherit;
+        z-index: -1;
+    }
+    .notif-SUCCESS {
+
+    }
+    .notif-SUCCESS::before {
+        content : "";
+        position : absolute;
+        top : 0;
+        left : 0;
+        right : 0;
+        bottom : 0;
+        background : linear-gradient(to right,transparent , rgb(154 205 50 / .65));
+        border-radius : inherit;
+        z-index: -1;
+    }
+    .notif-BURST {
+        animation : burst 2s 1 forwards ease-in;
+    }
+    @keyframes burst {
+        to {
+            opacity : 0;
+            display : none;
+        }
+    }
+
+    .iro-bowl {
+        min-width: 230px;
+        background: var(--black-4);
+        backdrop-filter: blur(1em);
+        padding : 1em;
+        padding-top: 3em;
+
+        border-radius: .5em;
+        border-top-right-radius: 1em;
+        color : var(--gray-3);
+        
+        position: fixed;
+        top : .35em;
+        right : .5em;
+        z-index: 20;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: start;
+        gap : 1.5em;
+    }
+    .iro-cont {
+        width : 100%;
+        background : inherit;
+        font-size : .8rem;
+        border-top : .1em dotted var(--black-6);
+        padding-top : 1.5em;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: start;
+        gap : .75em;
+    }
+    .iro-cont h6 {
+        text-transform: uppercase;
+        font-size: .7em;
+        color : var(--black-8);
+    }
+    .iro-box {
+        width : 100%; 
+        /* border-top : .1em solid var(--black-6);
+        border-bottom : .1em solid var(--black-6); */
+        font-size: .8em;
+        cursor : pointer;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap : 1em;
+    }
+    .iro-box:hover .iro-key {
+        background : var(--black-5);
+        color : var(--green);
+    }
+    .iro-shortcut {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap : .25em;
+    }
+    .iro-key {
+        border : .05em solid var(--black-6);
+        padding : .2em 1em;
+        border-radius: 5em;
+    }
+    .iro-function {
+        text-transform: capitalize;
+    }
+    .closekoi {
+        color : var(--base);
+    }
+    .closekoi:hover .iro-key {
+        background : var(--black-5);
+    }
+    
+
+    </style> 
+    
+</head> 
+<body> 
+
+    <div class="alert-bowl hide">
+        <div class="alert-cont"> 
+            <p class="alert-p">what s the file name</p>
+            <div class="alert-box hide">
+                <button onclick="closeAlert()" class="primary-btn">ok</button>
+            </div>
+            <div class="prompt-box hide"> 
+                <input type="text" id="prompt-inp">
+                <button onclick="closePrompt()" class="primary-btn">submit</button>
+            </div>
+        </div>
+    </div>  
+
+    <div class="iro-bowl hide">
+        <div class="iro-cont">
+            <h6>file</h6>
+            <div class="iro-box"  onclick="save(); toggleIro()">
+                <div class="iro-shortcut">
+                    <span class="iro-key"><i class="bi-command"></i></span>
+                    <span class="iro-key">S</span>
+                </div>
+                <p class="iro-function">save file</p>
+            </div>
+            <div class="iro-box">
+                <div class="iro-shortcut">
+                    <span class="iro-key"><i class="bi-command"></i></span>
+                    <span class="iro-key">N</span>
+                </div>
+                <p class="iro-function">New File</p>
+            </div>
+        </div>
+        <div class="iro-cont">
+            <h6>koi</h6>
+            <div class="iro-box" onclick="toggleSideBar(); toggleIro()">
+                <div class="iro-shortcut">
+                    <span class="iro-key"><i class="bi-command"></i></span>
+                    <span class="iro-key">B</span>
+                </div>
+                <p class="iro-function">Toggle Side Panel</p>
+            </div>
+            <div class="iro-box" onclick="toggleFullScreen(); toggleIro()">
+                <div class="iro-shortcut">
+                    <span class="iro-key"><i class="bi-command"></i></span>
+                    <span class="iro-key">K</span>
+                </div>
+                <p class="iro-function">Toggle Full Screen</p>
+            </div>
+            <div class="iro-box" onclick="toggleIro()">
+                <div class="iro-shortcut">
+                    <span class="iro-key"><i class="bi-command"></i></span>
+                    <span class="iro-key">I</span>
+                </div>
+                <p class="iro-function">Toggle This Panel</p>
+            </div>
+            <div class="iro-box closekoi" onclick="closeKOI();toggleIro()">
+                <div class="iro-shortcut">
+                    <span class="iro-key"><i class="bi-heartbreak-fill"></i></span>
+                </div>
+                <p class="iro-function">Close KOI</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifs-bowl">
+        <!-- <div class="notif-cont notif-BURST notif-SUCCESS">
+            <button onclick="removeNotif(this)"><i class="bi-x-lg"></i></button> 
+            Hello world hello world
+        </div>
+        <div class="notif-cont notif-INFO">
+            <button onclick="removeNotif(this)"><i class="bi-x-lg"></i></button> 
+            Hello world hello world
+        </div> -->
+    </div>
+
+        {% block content %}
+        {% endblock %} 
+</body>
+</html>

@@ -1,0 +1,111 @@
+{% macro recursive_display(Dirs) %}
+    {% for d in Dirs %} 
+        <div class="panel-folder-heading">
+            <div class="panel-folder-name"><i class="bi-folder"></i> {{ d.Name }}</div>
+            <!-- <div class="panel-folder-controls">
+                <button><i class="bi-three-dots"></i></button>
+            </div> -->
+        </div>
+        <div class="panel-cont">
+            {% for f in d.Files %}            
+                <div class="panel-line" path='{{ f.Path }}' size="{{f.Size}}" extension="{{f.Ext}}" name="{{ f.Name }}" onclick='openFile(this)'><div class="ball lang lang-{{f.Ext}}">•</div><div class='panel-name'>{{ f.Name }}</div></div> 
+            {% endfor %}      
+            {{ recursive_display(d.Dirs) }}
+        </div>
+    {% endfor %}
+ {% endmacro %}
+
+
+<style>
+ 
+    .panel-bowl { 
+        background : var(--black-3);
+        color : var(--black-9); 
+
+        min-width : 150px;
+        max-width : 400px;
+        height : inherit;
+        padding : 1em 2em 1em 2em; 
+        overflow-y : auto; 
+        
+        padding-bottom : 5rem;
+    } 
+    .panel-cont { 
+        padding :  0 0 0 2em;  
+        font-size : .8rem;   
+        border-left : .04em solid var(--black-5);  
+
+        display : flex;
+        flex-direction : column;
+        justify-content : start; 
+        align-items : start;  
+        gap : .5em;
+    } 
+    .panel-line {  
+        font-size : 1em; 
+        position : relative; 
+        cursor : pointer;
+        padding-left : 1em;
+    } 
+    .panel-line .ball {  
+        font-size : 2em;
+
+        position : absolute;
+        top : 50%;
+        left : -.2rem;
+        transform : translateY(-50%);
+    }
+    .panel-line:hover { 
+        color : var(--black) !important; 
+    } 
+    .panel-folder-heading { 
+        padding : .5em 0 .25em 0;
+        display : flex;
+        justify-content: space-between;
+        align-items: center;
+        gap : 1em;
+    }
+    .panel-folder-name {
+        display : flex;
+        justify-content: start;
+        align-items: center;
+        gap  : .5em;
+
+        color : var(--gray-2);
+    } 
+    .panel-folder-name i {
+        color : var(--black-8);
+    }
+    .panel-folder-controls {
+
+    }
+    .panel-folder-controls button {
+        background : inherit;
+        color : var(--black-8);
+        border : none;
+        outline : none;
+        border-radius: .25em;
+        cursor : pointer;
+    }
+
+</style> 
+
+<div class="panel-bowl">
+    <div class="panel-folder-heading">
+        <div class="panel-folder-name"><i class="bi-folder"></i> {{ DirName }}</div>
+        <div class="panel-folder-controls">
+            <!-- <button><i class="bi-file-earmark-plus"></i></button> -->
+        </div>
+    </div>
+    <br>
+    <div class="panel-cont"> 
+        {% for d in Dirs.Files %} 
+            <div class="panel-line" path='{{ d.Path }}' size="{{d.Size}}" extension="{{d.Ext}}" name="{{ d.Name }}" onclick='openFile(this)'><div class="ball lang lang-{{d.Ext}}">•</div><div class='panel-name'>{{ d.Name }}</div></div>
+        {% endfor %} 
+        {{ recursive_display(Dirs.Dirs) }}
+    </div> 
+     
+</div>
+
+
+
