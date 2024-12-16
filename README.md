@@ -1,6 +1,8 @@
 
-# *``` koi ```*
+# *``` koi ```* 
 *A Minimal Web-based Code Editor in Golang for Go*
+
+![koi image](https://github.com/kryshhzz/koi/releases/download/v1.1/main-ss.jpeg)
 
 ## Installation 
 
